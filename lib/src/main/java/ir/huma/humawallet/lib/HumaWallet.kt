@@ -1,6 +1,7 @@
 package ir.huma.humawallet.lib
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.widget.Toast
+
 
 class HumaWallet {
     private val receive = "ir.huma.humawallet.paystatus"
@@ -61,6 +63,8 @@ class HumaWallet {
         intent.putExtra("token", paymentToken)
         intent.putExtra("package", activity?.packageName)
         intent.setPackage("ir.huma.humastore")
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("taskId",activity?.taskId)
         activity!!.startActivity(intent)
         activity!!.registerReceiver(receiver, IntentFilter(receive))
     }
@@ -87,9 +91,16 @@ class HumaWallet {
 
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            var fIntent = Intent(activity, activity?.javaClass)
-            fIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            activity?.startActivity(fIntent)
+//            try {
+//                var fIntent = Intent(activity, activity?.javaClass)
+//                fIntent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+//                fIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                fIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+//                activity?.startActivity(fIntent)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+
             try {
                 if (onPayListener != null) {
                     if (intent.hasExtra("packageName") && intent.getStringExtra("packageName") == getContext()!!.packageName) {
