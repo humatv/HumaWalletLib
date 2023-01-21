@@ -51,7 +51,11 @@ class HumaWallet {
             throw RuntimeException("please setOnPayListener in java code!!!")
         }
         if (!checkHumaInstalled()) {
-            Toast.makeText(activity, "لطفا ابتدا برنامه هوما استور را نصب کنید.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                "لطفا ابتدا برنامه هوما استور را نصب کنید.",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -64,7 +68,7 @@ class HumaWallet {
         intent.putExtra("package", activity?.packageName)
         intent.setPackage("ir.huma.humastore")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.putExtra("taskId",activity?.taskId)
+        intent.putExtra("taskId", activity?.taskId)
         activity!!.startActivity(intent)
         activity!!.registerReceiver(receiver, IntentFilter(receive))
     }
@@ -103,7 +107,9 @@ class HumaWallet {
 
             try {
                 if (onPayListener != null) {
-                    if (intent.hasExtra("packageName") && intent.getStringExtra("packageName") == getContext()!!.packageName) {
+                    if ((intent.hasExtra("packageName") && intent.getStringExtra("packageName") == getContext()!!.packageName)
+                        || !intent.hasExtra("packageName")
+                    ) {
                         if (intent.getBooleanExtra("success", false)) {
                             onPayListener!!.onPayComplete(intent.getStringExtra("message"))
                         } else {
