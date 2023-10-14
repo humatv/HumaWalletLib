@@ -1,7 +1,6 @@
 package ir.huma.humawallet.lib
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,15 +16,22 @@ class HumaWallet {
     private var activity: Activity? = null
     private var paymentToken: String? = null
         get
+
+    private var isFastPayment = false
+
     private var onPayListener: OnPayListener? = null
 
     constructor(activity: Activity?) {
         this.activity = activity
     }
 
-
     fun setPaymentToken(token: String?): HumaWallet {
         this.paymentToken = token
+        return this
+    }
+
+    fun setFastPayment(isFast: Boolean): HumaWallet {
+        this.isFastPayment = isFast
         return this
     }
 
@@ -65,6 +71,7 @@ class HumaWallet {
     private fun sendPay() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("app://wallet.huma.ir"))
         intent.putExtra("token", paymentToken)
+        intent.putExtra("isFastPayment", isFastPayment)
         intent.putExtra("package", activity?.packageName)
         intent.setPackage("ir.huma.humastore")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
