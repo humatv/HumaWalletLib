@@ -17,7 +17,7 @@ class HumaWallet {
     private var paymentToken: String? = null
         get
 
-    private var isFastPayment = false
+    private var paymentType : PaymentType = PaymentType.NONE
 
     private var onPayListener: OnPayListener? = null
 
@@ -30,10 +30,11 @@ class HumaWallet {
         return this
     }
 
-    fun setFastPayment(isFast: Boolean): HumaWallet {
-        this.isFastPayment = isFast
+    fun setPaymentType(paymentType: PaymentType): HumaWallet {
+        this.paymentType = paymentType
         return this
     }
+
 
     fun getContext(): Activity? {
         return activity
@@ -71,7 +72,7 @@ class HumaWallet {
     private fun sendPay() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("app://wallet.huma.ir"))
         intent.putExtra("token", paymentToken)
-        intent.putExtra("isFastPayment", isFastPayment)
+        intent.putExtra("paymentType",paymentType)
         intent.putExtra("package", activity?.packageName)
         intent.setPackage("ir.huma.humastore")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
